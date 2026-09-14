@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bristol Gate — FTM Dividend Growth Predictions</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg: #F7F8FA;
+    --bg-card: #FFFFFF;
+    --bg-sidebar: #FBFBFC;
+    --navy: #1E3A5F;
+    --navy-dark: #0C1D2E;
+    --navy-light: #3B6B9A;
+    --accent: #C8764B;
+    --accent-light: #D8915F;
+    --text-primary: #1A1D21;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border: #E5E7EB;
+    --border-light: #F1F3F5;
+    --green: #059669;
+    --green-bg: rgba(5,150,105,0.08);
+    --red: #DC2626;
+    --red-bg: rgba(220,38,38,0.07);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.03), 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 2px 8px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,0.03), 0 12px 40px rgba(0,0,0,0.08);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --transition: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--navy-dark) 0%, #162D45 100%);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.05) inset, 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--navy-light), var(--accent));
+    opacity: 0.7;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .logo {
+    height: 36px;
+    filter: brightness(0) invert(1);
+    opacity: 0.95;
+  }
+  .header-divider {
+    width: 1px;
+    height: 24px;
+    background: rgba(255,255,255,0.15);
+  }
+  .header-title {
+    color: rgba(255,255,255,0.88);
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+  .header-badge {
+    background: rgba(200,118,75,0.15);
+    color: var(--accent-light);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    border: 1px solid rgba(200,118,75,0.25);
+    backdrop-filter: blur(8px);
+  }
+
+  /* Layout */
+  .layout {
+    display: flex;
+    height: calc(100vh - 67px);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 340px;
+    min-width: 340px;
+    background: var(--bg-sidebar);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-header {
+    padding: 20px 20px 0;
+  }
+  .search-container {
+    position: relative;
+    margin-bottom: 14px;
+  }
+  .search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  .search-input {
+    width: 100%;
+    padding: 11px 14px 11px 42px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: #fff;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    outline: none;
+  }
+  .search-input:focus {
+    border-color: var(--navy-light);
+    box-shadow: 0 0 0 4px rgba(30,58,95,0.08);
+  }
+  .search-input::placeholder { color: var(--text-muted); }
+
+  .sort-toggle {
+    display: flex;
+    background: #F1F3F5;
+    border-radius: var(--radius-sm);
+    padding: 3px;
+    margin-bottom: 14px;
+    border: none;
+  }
+  .sort-btn {
+    flex: 1;
+    padding: 7px 0;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all var(--transition);
+    background: transparent;
+    color: var(--text-muted);
+  }
+  .sort-btn:hover:not(.active) { color: var(--text-secondary); }
+  .sort-btn.active {
+    background: #fff;
+    color: var(--text-primary);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    font-weight: 600;
+  }
+
+  .list-count {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-light);
+    font-weight: 400;
+  }
+
+  .company-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+  }
+  .company-list::-webkit-scrollbar { width: 5px; }
+  .company-list::-webkit-scrollbar-track { background: transparent; }
+  .company-list::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 10px; }
+  .company-list::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
+
+  .company-item {
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: all var(--transition);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .company-item:hover { background: #F3F4F6; }
+  .company-item.active {
+    background: linear-gradient(90deg, rgba(30,58,95,0.06), rgba(30,58,95,0.02));
+    border-left: 3px solid var(--navy);
+    padding-left: 17px;
+  }
+  .company-item-left {
+    min-width: 0;
+  }
+  .company-ticker {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  .company-name {
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 210px;
+    margin-top: 2px;
+  }
+  .company-pred {
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+  .pred-positive { color: var(--green); background: var(--green-bg); }
+  .pred-negative { color: var(--red); background: var(--red-bg); }
+  .pred-na { color: var(--text-muted); background: #F3F4F6; }
+
+  /* Main content */
+  .main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Welcome state */
+  .welcome {
+    max-width: 680px;
+    width: 100%;
+    text-align: center;
+    margin-top: 60px;
+  }
+  .welcome h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--navy-dark);
+    margin-bottom: 10px;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+  .welcome p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    max-width: 460px;
+    margin: 0 auto 44px;
+    font-weight: 400;
+  }
+
+  /* Top 10 */
+  .top10-section {
+    width: 100%;
+    max-width: 680px;
+  }
+  .top10-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .top10-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .top10-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+  }
+  .top10-card:hover {
+    border-color: rgba(30,58,95,0.2);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-3px);
+  }
+  .top10-rank {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+  }
+  .top10-ticker {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+  }
+  .top10-pred {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--green);
+    font-variant-numeric: tabular-nums;
+  }
+  .top10-name {
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 400;
+  }
+
+  /* Result card */
+  .result-card {
+    display: none;
+    max-width: 680px;
+    width: 100%;
+    margin-top: 40px;
+  }
+  .result-card.visible { display: block; }
+
+  .result-inner {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 52px 48px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .result-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--navy) 0%, var(--navy-light) 40%, var(--accent) 100%);
+  }
+  .result-ticker {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--navy-dark);
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .result-name {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 36px;
+    font-weight: 400;
+  }
+  .result-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .result-value {
+    font-size: 60px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+  .result-value.positive { color: var(--green); }
+  .result-value.negative { color: var(--red); }
+  .result-value.na-value { color: var(--text-muted); font-size: 36px; }
+  .result-context {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    font-weight: 400;
+  }
+  .result-rank {
+    display: inline-block;
+    margin-top: 24px;
+    padding: 6px 18px;
+    background: var(--bg);
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    border: 1px solid var(--border);
+  }
+
+  /* Disclaimer */
+  .disclaimer {
+    max-width: 680px;
+    width: 100%;
+    margin-top: 36px;
+    padding: 14px 20px;
+    background: #F9FAFB;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+  .disclaimer p {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  /* Footer */
+  .footer {
+    padding: 12px 32px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    background: var(--bg-card);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <img src="BristolGateLogo.webp" alt="Bristol Gate" class="logo">
+    <div class="header-divider"></div>
+    <span class="header-title">FTM Dividend Growth Predictions</span>
+  </div>
+  <span class="header-badge">Data Science Preview</span>
+</div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="search-container">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search ticker or company…" autocomplete="off">
+      </div>
+      <div class="sort-toggle">
+        <button class="sort-btn active" data-sort="rank" onclick="setSort('rank')">Ranked</button>
+        <button class="sort-btn" data-sort="alpha" onclick="setSort('alpha')">A – Z</button>
+      </div>
+      <div class="list-count" id="listCount">471 companies</div>
+    </div>
+    <div class="company-list" id="companyList"></div>
+  </aside>
+
+  <main class="main" id="mainContent">
+    <div class="welcome" id="welcomeSection">
+      <h1>Dividend Growth Predictions</h1>
+      <p>Search for a company or select from the list to view Bristol Gate’s forward twelve-month dividend growth prediction, powered by our data science models.</p>
+    </div>
+
+    <div class="top10-section" id="top10Section">
+      <div class="top10-label">Top 10 Predicted Growers</div>
+      <div class="top10-grid" id="top10Grid"></div>
+    </div>
+
+    <div class="result-card" id="resultCard">
+      <div class="result-inner">
+        <div class="result-ticker" id="resTicker"></div>
+        <div class="result-name" id="resName"></div>
+        <div class="result-label">FTM Dividend Growth Prediction</div>
+        <div class="result-value" id="resValue"></div>
+        <div class="result-context">As of March 2026</div>
+        <div class="result-rank" id="resRank"></div>
+      </div>
+    </div>
+
+    <div class="disclaimer" id="disclaimer">
+      <p><strong>For illustrative purposes only.</strong> These predictions are generated by Bristol Gate’s proprietary data science models as of March 2026 and do not constitute investment advice. Past predictions are not indicative of future results. This is a demonstration of our analytical capabilities.</p>
+    </div>
+  </main>
+</div>
+
+<script>
+const DATA = [{"ticker": "VRT", "name": "Vertiv Holdings Co. Class A", "prediction": 0.507}, {"ticker": "NVDA", "name": "NVIDIA Corporation", "prediction": 0.421}, {"ticker": "RCL", "name": "Royal Caribbean Group", "prediction": 0.394}, {"ticker": "FIX", "name": "Comfort Systems USA, Inc.", "prediction": 0.37}, {"ticker": "GE", "name": "GE Aerospace", "prediction": 0.364}, {"ticker": "HWM", "name": "Howmet Aerospace Inc.", "prediction": 0.359}, {"ticker": "APH", "name": "Amphenol Corporation Class A", "prediction": 0.346}, {"ticker": "GM", "name": "General Motors Company", "prediction": 0.315}, {"ticker": "TRGP", "name": "Targa Resources Corp.", "prediction": 0.303}, {"ticker": "IBKR", "name": "Interactive Brokers Group, Inc. Class A", "prediction": 0.303}, {"ticker": "GS", "name": "Goldman Sachs Group, Inc.", "prediction": 0.295}, {"ticker": "MPWR", "name": "Monolithic Power Systems, Inc.", "prediction": 0.262}, {"ticker": "EXPE", "name": "Expedia Group, Inc.", "prediction": 0.259}, {"ticker": "ULTA", "name": "Ulta Beauty Inc.", "prediction": 0.258}, {"ticker": "WDC", "name": "Western Digital Corporation", "prediction": 0.252}, {"ticker": "MU", "name": "Micron Technology, Inc.", "prediction": 0.244}, {"ticker": "VRSN", "name": "VeriSign, Inc.", "prediction": 0.232}, {"ticker": "WAB", "name": "Westinghouse Air Brake Technologies Corporation", "prediction": 0.223}, {"ticker": "GOOG", "name": "Alphabet Inc. Class C", "prediction": 0.217}, {"ticker": "GOOGL", "name": "Alphabet Inc. Class A", "prediction": 0.209}, {"ticker": "DELL", "name": "Dell Technologies, Inc. Class C", "prediction": 0.205}, {"ticker": "DIS", "name": "Walt Disney Company", "prediction": 0.202}, {"ticker": "KLAC", "name": "KLA Corporation", "prediction": 0.194}, {"ticker": "PGR", "name": "Progressive Corporation", "prediction": 0.187}, {"ticker": "DAL", "name": "Delta Air Lines, Inc.", "prediction": 0.183}, {"ticker": "EME", "name": "EMCOR Group, Inc.", "prediction": 0.174}, {"ticker": "AXP", "name": "American Express Company", "prediction": 0.172}, {"ticker": "WRB", "name": "W. R. Berkley Corporation", "prediction": 0.167}, {"ticker": "DVN", "name": "Devon Energy Corporation", "prediction": 0.167}, {"ticker": "LRCX", "name": "Lam Research Corporation", "prediction": 0.163}, {"ticker": "BK", "name": "Bank of New York Mellon Corp", "prediction": 0.162}, {"ticker": "MCK", "name": "McKesson Corporation", "prediction": 0.162}, {"ticker": "AVGO", "name": "Broadcom Inc.", "prediction": 0.16}, {"ticker": "SYF", "name": "Synchrony Financial", "prediction": 0.159}, {"ticker": "AMD", "name": "Advanced Micro Devices, Inc.", "prediction": 0.158}, {"ticker": "PWR", "name": "Quanta Services, Inc.", "prediction": 0.156}, {"ticker": "LLY", "name": "Eli Lilly and Company", "prediction": 0.156}, {"ticker": "JPM", "name": "JPMorgan Chase & Co.", "prediction": 0.154}, {"ticker": "PHM", "name": "PulteGroup, Inc.", "prediction": 0.153}, {"ticker": "WSM", "name": "Williams-Sonoma, Inc.", "prediction": 0.152}, {"ticker": "CBOE", "name": "Cboe Global Markets Inc", "prediction": 0.152}, {"ticker": "REGN", "name": "Regeneron Pharmaceuticals, Inc.", "prediction": 0.152}, {"ticker": "ARES", "name": "Ares Management Corporation", "prediction": 0.151}, {"ticker": "AMAT", "name": "Applied Materials, Inc.", "prediction": 0.151}, {"ticker": "GEHC", "name": "GE Healthcare Technologies Inc.", "prediction": 0.148}, {"ticker": "NEM", "name": "Newmont Corporation", "prediction": 0.146}, {"ticker": "WFC", "name": "Wells Fargo & Company", "prediction": 0.144}, {"ticker": "HIG", "name": "Hartford Insurance Group, Inc.", "prediction": 0.144}, {"ticker": "ADSK", "name": "Autodesk, Inc.", "prediction": 0.142}, {"ticker": "COF", "name": "Capital One Financial Corp", "prediction": 0.14}, {"ticker": "GEV", "name": "GE Vernova Inc.", "prediction": 0.139}, {"ticker": "VLTO", "name": "Veralto Corporation", "prediction": 0.137}, {"ticker": "V", "name": "Visa Inc. Class A", "prediction": 0.136}, {"ticker": "COST", "name": "Costco Wholesale Corporation", "prediction": 0.134}, {"ticker": "NDAQ", "name": "Nasdaq, Inc.", "prediction": 0.134}, {"ticker": "WMT", "name": "Walmart Inc.", "prediction": 0.134}, {"ticker": "GRMN", "name": "Garmin Ltd.", "prediction": 0.133}, {"ticker": "DHI", "name": "D.R. Horton, Inc.", "prediction": 0.132}, {"ticker": "RMD", "name": "ResMed Inc.", "prediction": 0.132}, {"ticker": "WELL", "name": "Welltower Inc.", "prediction": 0.131}, {"ticker": "MA", "name": "Mastercard Incorporated Class A", "prediction": 0.126}, {"ticker": "SNA", "name": "Snap-on Incorporated", "prediction": 0.126}, {"ticker": "MSCI", "name": "MSCI Inc. Class A", "prediction": 0.125}, {"ticker": "INTU", "name": "Intuit Inc.", "prediction": 0.125}, {"ticker": "SCHW", "name": "Charles Schwab Corp", "prediction": 0.124}, {"ticker": "FAST", "name": "Fastenal Company", "prediction": 0.123}, {"ticker": "TMUS", "name": "T-Mobile US, Inc.", "prediction": 0.122}, {"ticker": "GL", "name": "Globe Life Inc.", "prediction": 0.121}, {"ticker": "AME", "name": "AMETEK, Inc.", "prediction": 0.12}, {"ticker": "BAC", "name": "Bank of America Corp", "prediction": 0.118}, {"ticker": "META", "name": "Meta Platforms Inc Class A", "prediction": 0.118}, {"ticker": "TT", "name": "Trane Technologies plc", "prediction": 0.117}, {"ticker": "MPC", "name": "Marathon Petroleum Corporation", "prediction": 0.116}, {"ticker": "ORCL", "name": "Oracle Corporation", "prediction": 0.115}, {"ticker": "RL", "name": "Ralph Lauren Corporation Class A", "prediction": 0.115}, {"ticker": "MSFT", "name": "Microsoft Corporation", "prediction": 0.115}, {"ticker": "AIZ", "name": "Assurant, Inc.", "prediction": 0.115}, {"ticker": "ALL", "name": "Allstate Corporation", "prediction": 0.114}, {"ticker": "PH", "name": "Parker-Hannifin Corporation", "prediction": 0.113}, {"ticker": "ECL", "name": "Ecolab Inc.", "prediction": 0.113}, {"ticker": "BX", "name": "Blackstone Inc.", "prediction": 0.111}, {"ticker": "LVS", "name": "Las Vegas Sands Corp.", "prediction": 0.111}, {"ticker": "CTAS", "name": "Cintas Corporation", "prediction": 0.111}, {"ticker": "TPR", "name": "Tapestry, Inc.", "prediction": 0.111}, {"ticker": "ADI", "name": "Analog Devices, Inc.", "prediction": 0.111}, {"ticker": "CMI", "name": "Cummins Inc.", "prediction": 0.111}, {"ticker": "ATO", "name": "Atmos Energy Corporation", "prediction": 0.11}, {"ticker": "BKNG", "name": "Booking Holdings Inc.", "prediction": 0.108}, {"ticker": "STT", "name": "State Street Corporation", "prediction": 0.108}, {"ticker": "CEG", "name": "Constellation Energy Corporation", "prediction": 0.107}, {"ticker": "MSI", "name": "Motorola Solutions, Inc.", "prediction": 0.106}, {"ticker": "CME", "name": "CME Group Inc. Class A", "prediction": 0.105}, {"ticker": "DHR", "name": "Danaher Corporation", "prediction": 0.104}, {"ticker": "VRSK", "name": "Verisk Analytics, Inc.", "prediction": 0.104}, {"ticker": "RJF", "name": "Raymond James Financial, Inc.", "prediction": 0.104}, {"ticker": "AFL", "name": "Aflac Incorporated", "prediction": 0.103}, {"ticker": "RTX", "name": "RTX Corporation", "prediction": 0.103}, {"ticker": "TEL", "name": "TE Connectivity plc", "prediction": 0.103}, {"ticker": "CTVA", "name": "Corteva Inc", "prediction": 0.103}, {"ticker": "NOC", "name": "Northrop Grumman Corp.", "prediction": 0.102}, {"ticker": "AIG", "name": "American International Group, Inc.", "prediction": 0.102}, {"ticker": "STE", "name": "STERIS plc", "prediction": 0.101}, {"ticker": "TMO", "name": "Thermo Fisher Scientific Inc.", "prediction": 0.1}, {"ticker": "ADBE", "name": "Adobe Inc.", "prediction": 0.1}, {"ticker": "J", "name": "Jacobs Solutions Inc.", "prediction": 0.098}, {"ticker": "WM", "name": "Waste Management, Inc.", "prediction": 0.098}, {"ticker": "STLD", "name": "Steel Dynamics, Inc.", "prediction": 0.098}, {"ticker": "ROL", "name": "Rollins, Inc.", "prediction": 0.097}, {"ticker": "MCO", "name": "Moody's Corporation", "prediction": 0.096}, {"ticker": "EBAY", "name": "eBay Inc.", "prediction": 0.096}, {"ticker": "AMP", "name": "Ameriprise Financial, Inc.", "prediction": 0.095}, {"ticker": "CAT", "name": "Caterpillar Inc.", "prediction": 0.095}, {"ticker": "MS", "name": "Morgan Stanley", "prediction": 0.095}, {"ticker": "KR", "name": "Kroger Co.", "prediction": 0.094}, {"ticker": "GWW", "name": "W.W. Grainger, Inc.", "prediction": 0.094}, {"ticker": "ETN", "name": "Eaton Corp. Plc", "prediction": 0.093}, {"ticker": "ZTS", "name": "Zoetis, Inc. Class A", "prediction": 0.093}, {"ticker": "PNR", "name": "Pentair plc", "prediction": 0.093}, {"ticker": "BR", "name": "Broadridge Financial Solutions, Inc.", "prediction": 0.093}, {"ticker": "NVR", "name": "NVR, Inc.", "prediction": 0.093}, {"ticker": "HUBB", "name": "Hubbell Incorporated", "prediction": 0.092}, {"ticker": "C", "name": "Citigroup Inc.", "prediction": 0.091}, {"ticker": "EFX", "name": "Equifax Inc.", "prediction": 0.091}, {"ticker": "CFG", "name": "Citizens Financial Group, Inc.", "prediction": 0.091}, {"ticker": "COR", "name": "Cencora, Inc.", "prediction": 0.09}, {"ticker": "MTB", "name": "M&T Bank Corporation", "prediction": 0.089}, {"ticker": "URI", "name": "United Rentals, Inc.", "prediction": 0.088}, {"ticker": "CB", "name": "Chubb Limited", "prediction": 0.088}, {"ticker": "XYL", "name": "Xylem Inc.", "prediction": 0.088}, {"ticker": "EQIX", "name": "Equinix, Inc.", "prediction": 0.088}, {"ticker": "SBAC", "name": "SBA Communications Corp. Class A", "prediction": 0.087}, {"ticker": "NDSN", "name": "Nordson Corporation", "prediction": 0.087}, {"ticker": "LIN", "name": "Linde plc", "prediction": 0.087}, {"ticker": "DPZ", "name": "Domino's Pizza, Inc.", "prediction": 0.087}, {"ticker": "ALLE", "name": "Allegion Public Limited Company", "prediction": 0.086}, {"ticker": "VTR", "name": "Ventas, Inc.", "prediction": 0.086}, {"ticker": "IRM", "name": "Iron Mountain, Inc.", "prediction": 0.086}, {"ticker": "VLO", "name": "Valero Energy Corporation", "prediction": 0.085}, {"ticker": "MLM", "name": "Martin Marietta Materials, Inc.", "prediction": 0.085}, {"ticker": "CARR", "name": "Carrier Global Corp.", "prediction": 0.085}, {"ticker": "AAPL", "name": "Apple Inc.", "prediction": 0.085}, {"ticker": "IR", "name": "Ingersoll Rand Inc.", "prediction": 0.084}, {"ticker": "DE", "name": "Deere & Company", "prediction": 0.084}, {"ticker": "FDX", "name": "FedEx Corporation", "prediction": 0.084}, {"ticker": "TRV", "name": "Travelers Companies, Inc.", "prediction": 0.082}, {"ticker": "APO", "name": "Apollo Global Management Inc", "prediction": 0.082}, {"ticker": "CNP", "name": "CenterPoint Energy, Inc.", "prediction": 0.081}, {"ticker": "PM", "name": "Philip Morris International Inc.", "prediction": 0.081}, {"ticker": "LDOS", "name": "Leidos Holdings, Inc.", "prediction": 0.081}, {"ticker": "ICE", "name": "Intercontinental Exchange, Inc.", "prediction": 0.081}, {"ticker": "RSG", "name": "Republic Services, Inc.", "prediction": 0.08}, {"ticker": "CINF", "name": "Cincinnati Financial Corporation", "prediction": 0.078}, {"ticker": "FOXA", "name": "Fox Corporation Class A", "prediction": 0.078}, {"ticker": "ROST", "name": "Ross Stores, Inc.", "prediction": 0.077}, {"ticker": "ACN", "name": "Accenture Plc Class A", "prediction": 0.077}, {"ticker": "FOX", "name": "Fox Corporation Class B", "prediction": 0.077}, {"ticker": "DGX", "name": "Quest Diagnostics Incorporated", "prediction": 0.077}, {"ticker": "BLK", "name": "BlackRock, Inc.", "prediction": 0.077}, {"ticker": "TPL", "name": "Texas Pacific Land Corporation", "prediction": 0.077}, {"ticker": "NI", "name": "NiSource Inc", "prediction": 0.076}, {"ticker": "FANG", "name": "Diamondback Energy, Inc.", "prediction": 0.076}, {"ticker": "PCAR", "name": "PACCAR Inc", "prediction": 0.075}, {"ticker": "BRO", "name": "Brown & Brown, Inc.", "prediction": 0.075}, {"ticker": "NEE", "name": "NextEra Energy, Inc.", "prediction": 0.075}, {"ticker": "TJX", "name": "TJX Companies Inc", "prediction": 0.074}, {"ticker": "CSX", "name": "CSX Corporation", "prediction": 0.074}, {"ticker": "LII", "name": "Lennox International Inc.", "prediction": 0.073}, {"ticker": "AWK", "name": "American Water Works Company, Inc.", "prediction": 0.073}, {"ticker": "ADP", "name": "Automatic Data Processing, Inc.", "prediction": 0.072}, {"ticker": "GD", "name": "General Dynamics Corporation", "prediction": 0.072}, {"ticker": "VMC", "name": "Vulcan Materials Company", "prediction": 0.072}, {"ticker": "NWS", "name": "News Corporation Class B", "prediction": 0.071}, {"ticker": "AON", "name": "Aon Plc Class A", "prediction": 0.071}, {"ticker": "NWSA", "name": "News Corporation Class A", "prediction": 0.07}, {"ticker": "AMGN", "name": "Amgen Inc.", "prediction": 0.069}, {"ticker": "EXPD", "name": "Expeditors International of Washington, Inc.", "prediction": 0.069}, {"ticker": "HPE", "name": "Hewlett Packard Enterprise Co.", "prediction": 0.069}, {"ticker": "AVY", "name": "Avery Dennison Corporation", "prediction": 0.069}, {"ticker": "PNC", "name": "PNC Financial Services Group, Inc.", "prediction": 0.069}, {"ticker": "FITB", "name": "Fifth Third Bancorp", "prediction": 0.068}, {"ticker": "ETR", "name": "Entergy Corporation", "prediction": 0.068}, {"ticker": "EQT", "name": "EQT Corporation", "prediction": 0.068}, {"ticker": "BKR", "name": "Baker Hughes Company Class A", "prediction": 0.067}, {"ticker": "OTIS", "name": "Otis Worldwide Corporation", "prediction": 0.067}, {"ticker": "L", "name": "Loews Corporation", "prediction": 0.067}, {"ticker": "OXY", "name": "Occidental Petroleum Corporation", "prediction": 0.066}, {"ticker": "HST", "name": "Host Hotels & Resorts, Inc.", "prediction": 0.066}, {"ticker": "WMB", "name": "Williams Companies, Inc.", "prediction": 0.065}, {"ticker": "CF", "name": "CF Industries Holdings, Inc.", "prediction": 0.065}, {"ticker": "CTSH", "name": "Cognizant Technology Solutions Corporation Class A", "prediction": 0.065}, {"ticker": "NTAP", "name": "NetApp, Inc.", "prediction": 0.064}, {"ticker": "SYK", "name": "Stryker Corporation", "prediction": 0.063}, {"ticker": "CRM", "name": "Salesforce, Inc.", "prediction": 0.063}, {"ticker": "AEE", "name": "Ameren Corporation", "prediction": 0.063}, {"ticker": "JNJ", "name": "Johnson & Johnson", "prediction": 0.062}, {"ticker": "PFG", "name": "Principal Financial Group, Inc.", "prediction": 0.062}, {"ticker": "MRSH", "name": "Marsh & McLennan Companies, Inc.", "prediction": 0.062}, {"ticker": "RF", "name": "Regions Financial Corporation", "prediction": 0.061}, {"ticker": "PPL", "name": "PPL Corporation", "prediction": 0.061}, {"ticker": "FIS", "name": "Fidelity National Information Services, Inc.", "prediction": 0.061}, {"ticker": "REG", "name": "Regency Centers Corporation", "prediction": 0.06}, {"ticker": "JKHY", "name": "Jack Henry & Associates, Inc.", "prediction": 0.06}, {"ticker": "ROK", "name": "Rockwell Automation, Inc.", "prediction": 0.06}, {"ticker": "SHW", "name": "Sherwin-Williams Company", "prediction": 0.059}, {"ticker": "JCI", "name": "Johnson Controls International plc", "prediction": 0.059}, {"ticker": "ROP", "name": "Roper Technologies, Inc.", "prediction": 0.059}, {"ticker": "ODFL", "name": "Old Dominion Freight Line, Inc.", "prediction": 0.059}, {"ticker": "HCA", "name": "HCA Healthcare Inc", "prediction": 0.058}, {"ticker": "TYL", "name": "Tyler Technologies, Inc.", "prediction": 0.057}, {"ticker": "ABBV", "name": "AbbVie, Inc.", "prediction": 0.057}, {"ticker": "WEC", "name": "WEC Energy Group Inc", "prediction": 0.057}, {"ticker": "ABT", "name": "Abbott Laboratories", "prediction": 0.057}, {"ticker": "TSCO", "name": "Tractor Supply Company", "prediction": 0.057}, {"ticker": "LOW", "name": "Lowe's Companies, Inc.", "prediction": 0.056}, {"ticker": "PLD", "name": "Prologis, Inc.", "prediction": 0.056}, {"ticker": "GILD", "name": "Gilead Sciences, Inc.", "prediction": 0.056}, {"ticker": "AOS", "name": "A. O. Smith Corporation", "prediction": 0.055}, {"ticker": "PEG", "name": "Public Service Enterprise Group Inc", "prediction": 0.055}, {"ticker": "DTE", "name": "DTE Energy Company", "prediction": 0.055}, {"ticker": "NTRS", "name": "Northern Trust Corporation", "prediction": 0.054}, {"ticker": "YUM", "name": "Yum! Brands, Inc.", "prediction": 0.054}, {"ticker": "CMS", "name": "CMS Energy Corporation", "prediction": 0.054}, {"ticker": "MRK", "name": "Merck & Co., Inc.", "prediction": 0.054}, {"ticker": "LNT", "name": "Alliant Energy Corporation", "prediction": 0.054}, {"ticker": "PSX", "name": "Phillips 66", "prediction": 0.053}, {"ticker": "HON", "name": "Honeywell International Inc.", "prediction": 0.053}, {"ticker": "PAYX", "name": "Paychex, Inc.", "prediction": 0.052}, {"ticker": "EXC", "name": "Exelon Corporation", "prediction": 0.05}, {"ticker": "HII", "name": "Huntington Ingalls Industries, Inc.", "prediction": 0.05}, {"ticker": "A", "name": "Agilent Technologies, Inc.", "prediction": 0.049}, {"ticker": "MMM", "name": "3M Company", "prediction": 0.049}, {"ticker": "OMC", "name": "Omnicom Group Inc", "prediction": 0.049}, {"ticker": "LHX", "name": "L3Harris Technologies Inc", "prediction": 0.049}, {"ticker": "COO", "name": "Cooper Companies, Inc.", "prediction": 0.049}, {"ticker": "MDLZ", "name": "Mondelez International, Inc. Class A", "prediction": 0.048}, {"ticker": "SPG", "name": "Simon Property Group, Inc.", "prediction": 0.048}, {"ticker": "LMT", "name": "Lockheed Martin Corporation", "prediction": 0.048}, {"ticker": "KO", "name": "Coca-Cola Company", "prediction": 0.047}, {"ticker": "ITW", "name": "Illinois Tool Works Inc.", "prediction": 0.047}, {"ticker": "SPGI", "name": "S&P Global, Inc.", "prediction": 0.047}, {"ticker": "MKC", "name": "McCormick & Company, Incorporated", "prediction": 0.047}, {"ticker": "MCD", "name": "McDonald's Corporation", "prediction": 0.047}, {"ticker": "ERIE", "name": "Erie Indemnity Company Class A", "prediction": 0.047}, {"ticker": "CRH", "name": "CRH public limited company", "prediction": 0.046}, {"ticker": "TXT", "name": "Textron Inc.", "prediction": 0.046}, {"ticker": "MET", "name": "MetLife, Inc.", "prediction": 0.046}, {"ticker": "HAS", "name": "Hasbro, Inc.", "prediction": 0.045}, {"ticker": "IEX", "name": "IDEX Corporation", "prediction": 0.045}, {"ticker": "UHS", "name": "Universal Health Services, Inc. Class B", "prediction": 0.045}, {"ticker": "EMR", "name": "Emerson Electric Co.", "prediction": 0.045}, {"ticker": "FE", "name": "FirstEnergy Corp.", "prediction": 0.044}, {"ticker": "BDX", "name": "Becton, Dickinson and Company", "prediction": 0.044}, {"ticker": "QCOM", "name": "QUALCOMM Incorporated", "prediction": 0.044}, {"ticker": "BG", "name": "Bunge Global SA", "prediction": 0.044}, {"ticker": "BALL", "name": "Ball Corporation", "prediction": 0.044}, {"ticker": "PEP", "name": "PepsiCo, Inc.", "prediction": 0.044}, {"ticker": "XEL", "name": "Xcel Energy Inc.", "prediction": 0.043}, {"ticker": "AJG", "name": "Arthur J. Gallagher & Co.", "prediction": 0.043}, {"ticker": "SLB", "name": "SLB Limited", "prediction": 0.042}, {"ticker": "SW", "name": "Smurfit Westrock PLC", "prediction": 0.041}, {"ticker": "TER", "name": "Teradyne, Inc.", "prediction": 0.041}, {"ticker": "SRE", "name": "Sempra", "prediction": 0.041}, {"ticker": "CI", "name": "Cigna Group", "prediction": 0.041}, {"ticker": "SYY", "name": "Sysco Corporation", "prediction": 0.041}, {"ticker": "PG", "name": "Procter & Gamble Company", "prediction": 0.04}, {"ticker": "AEP", "name": "American Electric Power Company, Inc.", "prediction": 0.04}, {"ticker": "USB", "name": "U.S. Bancorp", "prediction": 0.04}, {"ticker": "PPG", "name": "PPG Industries, Inc.", "prediction": 0.04}, {"ticker": "EG", "name": "Everest Group, Ltd.", "prediction": 0.04}, {"ticker": "CHD", "name": "Church & Dwight Co., Inc.", "prediction": 0.04}, {"ticker": "CSCO", "name": "Cisco Systems, Inc.", "prediction": 0.04}, {"ticker": "GLW", "name": "Corning Inc", "prediction": 0.039}, {"ticker": "ES", "name": "Eversource Energy", "prediction": 0.039}, {"ticker": "WST", "name": "West Pharmaceutical Services, Inc.", "prediction": 0.038}, {"ticker": "EXE", "name": "Expand Energy Corporation", "prediction": 0.038}, {"ticker": "NUE", "name": "Nucor Corporation", "prediction": 0.038}, {"ticker": "MAS", "name": "Masco Corporation", "prediction": 0.036}, {"ticker": "EVRG", "name": "Evergy, Inc.", "prediction": 0.036}, {"ticker": "MAR", "name": "Marriott International, Inc. Class A", "prediction": 0.036}, {"ticker": "KIM", "name": "Kimco Realty Corporation", "prediction": 0.035}, {"ticker": "KMI", "name": "Kinder Morgan Inc Class P", "prediction": 0.035}, {"ticker": "NXPI", "name": "NXP Semiconductors NV", "prediction": 0.034}, {"ticker": "HD", "name": "Home Depot, Inc.", "prediction": 0.034}, {"ticker": "ELV", "name": "Elevance Health, Inc.", "prediction": 0.034}, {"ticker": "CVX", "name": "Chevron Corporation", "prediction": 0.034}, {"ticker": "ESS", "name": "Essex Property Trust, Inc.", "prediction": 0.033}, {"ticker": "EIX", "name": "Edison International", "prediction": 0.033}, {"ticker": "MO", "name": "Altria Group, Inc.", "prediction": 0.033}, {"ticker": "ED", "name": "Consolidated Edison, Inc.", "prediction": 0.033}, {"ticker": "WTW", "name": "Willis Towers Watson Public Limited Company", "prediction": 0.033}, {"ticker": "PRU", "name": "Prudential Financial, Inc.", "prediction": 0.032}, {"ticker": "JBL", "name": "Jabil Inc.", "prediction": 0.032}, {"ticker": "HLT", "name": "Hilton Worldwide Holdings Inc.", "prediction": 0.032}, {"ticker": "XOM", "name": "Exxon Mobil Corporation", "prediction": 0.032}, {"ticker": "OKE", "name": "ONEOK, Inc.", "prediction": 0.032}, {"ticker": "KDP", "name": "Keurig Dr Pepper Inc.", "prediction": 0.032}, {"ticker": "FDS", "name": "FactSet Research Systems Inc.", "prediction": 0.032}, {"ticker": "CTRA", "name": "Coterra Energy Inc.", "prediction": 0.031}, {"ticker": "UNP", "name": "Union Pacific Corporation", "prediction": 0.031}, {"ticker": "CL", "name": "Colgate-Palmolive Company", "prediction": 0.031}, {"ticker": "DRI", "name": "Darden Restaurants, Inc.", "prediction": 0.031}, {"ticker": "GEN", "name": "Gen Digital Inc.", "prediction": 0.029}, {"ticker": "TXN", "name": "Texas Instruments Incorporated", "prediction": 0.028}, {"ticker": "EOG", "name": "EOG Resources, Inc.", "prediction": 0.028}, {"ticker": "IVZ", "name": "Invesco Ltd.", "prediction": 0.028}, {"ticker": "BMY", "name": "Bristol-Myers Squibb Company", "prediction": 0.027}, {"ticker": "SO", "name": "Southern Company", "prediction": 0.027}, {"ticker": "AMT", "name": "American Tower Corporation", "prediction": 0.026}, {"ticker": "JBHT", "name": "J.B. Hunt Transport Services, Inc.", "prediction": 0.026}, {"ticker": "CHRW", "name": "C.H. Robinson Worldwide, Inc.", "prediction": 0.025}, {"ticker": "DOV", "name": "Dover Corporation", "prediction": 0.024}, {"ticker": "DUK", "name": "Duke Energy Corporation", "prediction": 0.024}, {"ticker": "PKG", "name": "Packaging Corporation of America", "prediction": 0.023}, {"ticker": "VICI", "name": "VICI Properties Inc", "prediction": 0.023}, {"ticker": "COP", "name": "ConocoPhillips", "prediction": 0.023}, {"ticker": "PNW", "name": "Pinnacle West Capital Corp", "prediction": 0.023}, {"ticker": "TDG", "name": "TransDigm Group Incorporated", "prediction": 0.023}, {"ticker": "FTV", "name": "Fortive Corp.", "prediction": 0.022}, {"ticker": "EA", "name": "Electronic Arts Inc.", "prediction": 0.022}, {"ticker": "FCX", "name": "Freeport-McMoRan, Inc.", "prediction": 0.022}, {"ticker": "FRT", "name": "Federal Realty Investment Trust", "prediction": 0.021}, {"ticker": "VZ", "name": "Verizon Communications Inc.", "prediction": 0.02}, {"ticker": "HSY", "name": "Hershey Company", "prediction": 0.02}, {"ticker": "LH", "name": "Labcorp Holdings Inc.", "prediction": 0.019}, {"ticker": "ADM", "name": "Archer-Daniels-Midland Company", "prediction": 0.018}, {"ticker": "DG", "name": "Dollar General Corporation", "prediction": 0.017}, {"ticker": "EQR", "name": "Equity Residential", "prediction": 0.017}, {"ticker": "AVB", "name": "AvalonBay Communities, Inc.", "prediction": 0.016}, {"ticker": "ACGL", "name": "Arch Capital Group Ltd.", "prediction": 0.016}, {"ticker": "CAH", "name": "Cardinal Health, Inc.", "prediction": 0.015}, {"ticker": "CPT", "name": "Camden Property Trust", "prediction": 0.015}, {"ticker": "IBM", "name": "International Business Machines Corporation", "prediction": 0.014}, {"ticker": "TAP", "name": "Molson Coors Beverage Company Class B", "prediction": 0.013}, {"ticker": "GPC", "name": "Genuine Parts Company", "prediction": 0.013}, {"ticker": "T", "name": "AT&T Inc", "prediction": 0.012}, {"ticker": "EL", "name": "Estee Lauder Companies Inc. Class A", "prediction": 0.011}, {"ticker": "TROW", "name": "T. Rowe Price Group, Inc.", "prediction": 0.011}, {"ticker": "SBUX", "name": "Starbucks Corporation", "prediction": 0.009}, {"ticker": "DLR", "name": "Digital Realty Trust, Inc.", "prediction": 0.008}, {"ticker": "WY", "name": "Weyerhaeuser Company", "prediction": 0.007}, {"ticker": "CMCSA", "name": "Comcast Corporation Class A", "prediction": 0.006}, {"ticker": "BEN", "name": "Franklin Resources, Inc.", "prediction": 0.004}, {"ticker": "STZ", "name": "Constellation Brands, Inc. Class A", "prediction": 0.004}, {"ticker": "CVS", "name": "CVS Health Corporation", "prediction": 0.004}, {"ticker": "APD", "name": "Air Products and Chemicals, Inc.", "prediction": 0.003}, {"ticker": "O", "name": "Realty Income Corporation", "prediction": 0.003}, {"ticker": "CDW", "name": "CDW Corporation", "prediction": 0.003}, {"ticker": "MDT", "name": "Medtronic Plc", "prediction": 0.003}, {"ticker": "INVH", "name": "Invitation Homes, Inc.", "prediction": 0.002}, {"ticker": "MAA", "name": "Mid-America Apartment Communities, Inc.", "prediction": 0.001}, {"ticker": "BBY", "name": "Best Buy Co., Inc.", "prediction": 0.001}, {"ticker": "PYPL", "name": "PayPal Holdings, Inc.", "prediction": 0.001}, {"ticker": "D", "name": "Dominion Energy Inc", "prediction": 0.001}, {"ticker": "TECH", "name": "Bio-Techne Corporation", "prediction": 0.001}, {"ticker": "KMB", "name": "Kimberly-Clark Corporation", "prediction": 0}, {"ticker": "NSC", "name": "Norfolk Southern Corporation", "prediction": -0.001}, {"ticker": "TFC", "name": "Truist Financial Corporation", "prediction": -0.001}, {"ticker": "POOL", "name": "Pool Corporation", "prediction": -0.002}, {"ticker": "PSA", "name": "Public Storage", "prediction": -0.002}, {"ticker": "HBAN", "name": "Huntington Bancshares Incorporated", "prediction": -0.003}, {"ticker": "UDR", "name": "UDR, Inc.", "prediction": -0.005}, {"ticker": "CLX", "name": "Clorox Company", "prediction": -0.007}, {"ticker": "UNH", "name": "UnitedHealth Group Incorporated", "prediction": -0.008}, {"ticker": "IFF", "name": "International Flavors & Fragrances Inc.", "prediction": -0.008}, {"ticker": "AMCR", "name": "Amcor PLC", "prediction": -0.01}, {"ticker": "RVTY", "name": "Revvity, Inc.", "prediction": -0.01}, {"ticker": "ZBH", "name": "Zimmer Biomet Holdings, Inc.", "prediction": -0.011}, {"ticker": "MOS", "name": "Mosaic Company", "prediction": -0.011}, {"ticker": "TGT", "name": "Target Corporation", "prediction": -0.011}, {"ticker": "EXR", "name": "Extra Space Storage Inc.", "prediction": -0.011}, {"ticker": "SJM", "name": "J.M. Smucker Company", "prediction": -0.011}, {"ticker": "KEY", "name": "KeyCorp", "prediction": -0.012}, {"ticker": "SWK", "name": "Stanley Black & Decker, Inc.", "prediction": -0.013}, {"ticker": "LUV", "name": "Southwest Airlines Co.", "prediction": -0.016}, {"ticker": "ALB", "name": "Albemarle Corporation", "prediction": -0.017}, {"ticker": "BF/B", "name": "Brown-Forman Corporation Class B", "prediction": -0.018}, {"ticker": "HAL", "name": "Halliburton Company", "prediction": -0.019}, {"ticker": "NKE", "name": "NIKE, Inc. Class B", "prediction": -0.019}, {"ticker": "APA", "name": "APA Corporation", "prediction": -0.02}, {"ticker": "TSN", "name": "Tyson Foods, Inc. Class A", "prediction": -0.02}, {"ticker": "LEN", "name": "Lennar Corporation Class A", "prediction": -0.022}, {"ticker": "KVUE", "name": "Kenvue, Inc.", "prediction": -0.023}, {"ticker": "PFE", "name": "Pfizer Inc.", "prediction": -0.023}, {"ticker": "HRL", "name": "Hormel Foods Corporation", "prediction": -0.024}, {"ticker": "HPQ", "name": "HP Inc.", "prediction": -0.03}, {"ticker": "BA", "name": "Boeing Company", "prediction": -0.033}, {"ticker": "TTWO", "name": "Take-Two Interactive Software, Inc.", "prediction": -0.037}, {"ticker": "MCHP", "name": "Microchip Technology Incorporated", "prediction": -0.041}, {"ticker": "TKO", "name": "TKO Group Holdings, Inc. Class A", "prediction": -0.043}, {"ticker": "DOC", "name": "Healthpeak Properties, Inc.", "prediction": -0.045}, {"ticker": "GIS", "name": "General Mills, Inc.", "prediction": -0.045}, {"ticker": "IP", "name": "International Paper Company", "prediction": -0.048}, {"ticker": "GNRC", "name": "Generac Holdings Inc.", "prediction": -0.048}, {"ticker": "UPS", "name": "United Parcel Service, Inc. Class B", "prediction": -0.05}, {"ticker": "APTV", "name": "Aptiv PLC", "prediction": -0.051}, {"ticker": "SWKS", "name": "Skyworks Solutions, Inc.", "prediction": -0.053}, {"ticker": "FICO", "name": "Fair Isaac Corporation", "prediction": -0.054}, {"ticker": "CPB", "name": "Campbell's Company", "prediction": -0.057}, {"ticker": "F", "name": "Ford Motor Company", "prediction": -0.073}, {"ticker": "KHC", "name": "Kraft Heinz Company", "prediction": -0.075}, {"ticker": "IT", "name": "Gartner, Inc.", "prediction": -0.102}, {"ticker": "CAG", "name": "Conagra Brands, Inc.", "prediction": -0.114}, {"ticker": "DD", "name": "DuPont de Nemours, Inc.", "prediction": -0.116}, {"ticker": "CCI", "name": "Crown Castle Inc.", "prediction": -0.138}, {"ticker": "LYB", "name": "LyondellBasell Industries NV", "prediction": -0.198}, {"ticker": "INTC", "name": "Intel Corporation", "prediction": -0.263}, {"ticker": "DOW", "name": "Dow, Inc.", "prediction": -0.39}, {"ticker": "BAX", "name": "Baxter International Inc.", "prediction": -0.488}, {"ticker": "ANET", "name": "Arista Networks, Inc.", "prediction": null}, {"ticker": "UBER", "name": "Uber Technologies, Inc.", "prediction": null}, {"ticker": "CRWD", "name": "CrowdStrike Holdings, Inc. Class A", "prediction": null}, {"ticker": "TRMB", "name": "Trimble Inc.", "prediction": null}, {"ticker": "CBRE", "name": "CBRE Group, Inc. Class A", "prediction": null}, {"ticker": "CRL", "name": "Charles River Laboratories International, Inc.", "prediction": null}, {"ticker": "BSX", "name": "Boston Scientific Corporation", "prediction": null}, {"ticker": "CIEN", "name": "Ciena Corporation", "prediction": null}, {"ticker": "TSLA", "name": "Tesla, Inc.", "prediction": null}, {"ticker": "EPAM", "name": "EPAM Systems, Inc.", "prediction": null}, {"ticker": "AKAM", "name": "Akamai Technologies, Inc.", "prediction": null}, {"ticker": "ORLY", "name": "O'Reilly Automotive, Inc.", "prediction": null}, {"ticker": "MTD", "name": "Mettler-Toledo International Inc.", "prediction": null}, {"ticker": "TTD", "name": "Trade Desk, Inc. Class A", "prediction": null}, {"ticker": "FISV", "name": "Fiserv, Inc.", "prediction": null}, {"ticker": "EW", "name": "Edwards Lifesciences Corporation", "prediction": null}, {"ticker": "HSIC", "name": "Henry Schein, Inc.", "prediction": null}, {"ticker": "BLDR", "name": "Builders FirstSource, Inc.", "prediction": null}, {"ticker": "IQV", "name": "IQVIA Holdings Inc", "prediction": null}, {"ticker": "CDNS", "name": "Cadence Design Systems, Inc.", "prediction": null}, {"ticker": "PANW", "name": "Palo Alto Networks, Inc.", "prediction": null}, {"ticker": "PLTR", "name": "Palantir Technologies Inc. Class A", "prediction": null}, {"ticker": "CPAY", "name": "Corpay, Inc.", "prediction": null}, {"ticker": "WAT", "name": "Waters Corporation", "prediction": null}, {"ticker": "DECK", "name": "Deckers Outdoor Corporation", "prediction": null}, {"ticker": "GDDY", "name": "GoDaddy, Inc. Class A", "prediction": null}, {"ticker": "MRNA", "name": "Moderna, Inc.", "prediction": null}, {"ticker": "DASH", "name": "DoorDash, Inc. Class A", "prediction": null}, {"ticker": "FTNT", "name": "Fortinet, Inc.", "prediction": null}, {"ticker": "SNPS", "name": "Synopsys, Inc.", "prediction": null}, {"ticker": "FSLR", "name": "First Solar, Inc.", "prediction": null}, {"ticker": "BRK/B", "name": "Berkshire Hathaway Inc. Class B", "prediction": null}, {"ticker": "ALGN", "name": "Align Technology, Inc.", "prediction": null}, {"ticker": "DXCM", "name": "DexCom, Inc.", "prediction": null}, {"ticker": "APP", "name": "AppLovin Corp. Class A", "prediction": null}, {"ticker": "NFLX", "name": "Netflix, Inc.", "prediction": null}, {"ticker": "COHR", "name": "Coherent Corp.", "prediction": null}, {"ticker": "PTC", "name": "PTC Inc.", "prediction": null}, {"ticker": "CPRT", "name": "Copart, Inc.", "prediction": null}, {"ticker": "CHTR", "name": "Charter Communications, Inc. Class A", "prediction": null}, {"ticker": "ON", "name": "ON Semiconductor Corporation", "prediction": null}, {"ticker": "VRTX", "name": "Vertex Pharmaceuticals Incorporated", "prediction": null}, {"ticker": "ZBRA", "name": "Zebra Technologies Corporation Class A", "prediction": null}, {"ticker": "CSGP", "name": "CoStar Group, Inc.", "prediction": null}, {"ticker": "DVA", "name": "DaVita Inc.", "prediction": null}, {"ticker": "KEYS", "name": "Keysight Technologies Inc", "prediction": null}, {"ticker": "ABNB", "name": "Airbnb, Inc. Class A", "prediction": null}, {"ticker": "SOLV", "name": "Solventum Corporation", "prediction": null}, {"ticker": "AZO", "name": "AutoZone, Inc.", "prediction": null}, {"ticker": "FFIV", "name": "F5, Inc.", "prediction": null}, {"ticker": "BIIB", "name": "Biogen Inc.", "prediction": null}, {"ticker": "WDAY", "name": "Workday, Inc. Class A", "prediction": null}, {"ticker": "CMG", "name": "Chipotle Mexican Grill, Inc.", "prediction": null}, {"ticker": "INCY", "name": "Incyte Corporation", "prediction": null}, {"ticker": "AMZN", "name": "Amazon.com, Inc.", "prediction": null}, {"ticker": "LULU", "name": "lululemon athletica inc.", "prediction": null}, {"ticker": "DDOG", "name": "Datadog, Inc. Class A", "prediction": null}, {"ticker": "ISRG", "name": "Intuitive Surgical, Inc.", "prediction": null}, {"ticker": "IDXX", "name": "IDEXX Laboratories, Inc.", "prediction": null}, {"ticker": "MNST", "name": "Monster Beverage Corporation", "prediction": null}, {"ticker": "TDY", "name": "Teledyne Technologies Incorporated", "prediction": null}, {"ticker": "DLTR", "name": "Dollar Tree, Inc.", "prediction": null}, {"ticker": "NOW", "name": "ServiceNow, Inc.", "prediction": null}];
+
+let currentSort = 'rank';
+let selectedTicker = null;
+
+// Pre-compute ranks
+const ranked = DATA.filter(d => d.prediction !== null).sort((a,b) => b.prediction - a.prediction);
+ranked.forEach((d, i) => d.rank = i + 1);
+const rankMap = {};
+ranked.forEach(d => rankMap[d.ticker] = d.rank);
+DATA.forEach(d => { if (d.prediction === null) d.rank = null; else d.rank = rankMap[d.ticker]; });
+
+function formatPred(val) {
+  if (val === null) return 'N/A';
+  return (val >= 0 ? '+' : '') + (val * 100).toFixed(1) + '%';
+}
+
+function predClass(val) {
+  if (val === null) return 'pred-na';
+  return val >= 0 ? 'pred-positive' : 'pred-negative';
+}
+
+function renderList(filter = '') {
+  const list = document.getElementById('companyList');
+  let items = [...DATA];
+  if (filter) {
+    const q = filter.toLowerCase();
+    items = items.filter(d => d.ticker.toLowerCase().includes(q) || d.name.toLowerCase().includes(q));
+  }
+  if (currentSort === 'rank') {
+    items.sort((a,b) => {
+      if (a.prediction === null && b.prediction === null) return a.name.localeCompare(b.name);
+      if (a.prediction === null) return 1;
+      if (b.prediction === null) return 1;
+      return b.prediction - a.prediction;
+    });
+  } else {
+    items.sort((a,b) => a.name.localeCompare(b.name));
+  }
+
+  document.getElementById('listCount').textContent = items.length + (items.length === 1 ? ' company' : ' companies');
+
+  list.innerHTML = items.map(d => `
+    <div class="company-item ${d.ticker === selectedTicker ? 'active' : ''}" onclick="selectCompany('${d.ticker}')">
+      <div class="company-item-left">
+        <div class="company-ticker">${d.ticker}</div>
+        <div class="company-name">${d.name}</div>
+      </div>
+      <span class="company-pred ${predClass(d.prediction)}">${formatPred(d.prediction)}</span>
+    </div>
+  `).join('');
+}
+
+function renderTop10() {
+  const top10 = ranked.slice(0, 10);
+  document.getElementById('top10Grid').innerHTML = top10.map((d, i) => `
+    <div class="top10-card" onclick="selectCompany('${d.ticker}')">
+      <div class="top10-rank">#${i+1}</div>
+      <div class="top10-ticker">${d.ticker}</div>
+      <div class="top10-pred">${formatPred(d.prediction)}</div>
+      <div class="top10-name">${d.name}</div>
+    </div>
+  `).join('');
+}
+
+function selectCompany(ticker) {
+  selectedTicker = ticker;
+  const d = DATA.find(x => x.ticker === ticker);
+  if (!d) return;
+
+  document.getElementById('resTicker').textContent = d.ticker;
+  document.getElementById('resName').textContent = d.name;
+  const valEl = document.getElementById('resValue');
+  valEl.textContent = formatPred(d.prediction);
+  valEl.className = 'result-value ' + (d.prediction === null ? 'na-value' : d.prediction >= 0 ? 'positive' : 'negative');
+
+  const rankEl = document.getElementById('resRank');
+  if (d.rank !== null) {
+    rankEl.textContent = 'Rank ' + d.rank + ' of ' + ranked.length;
+    rankEl.style.display = 'inline-block';
+  } else {
+    rankEl.style.display = 'none';
+  }
+
+  document.getElementById('resultCard').classList.add('visible');
+  document.getElementById('welcomeSection').style.display = 'none';
+  renderList(document.getElementById('searchInput').value);
+}
+
+function setSort(mode) {
+  currentSort = mode;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === mode));
+  renderList(document.getElementById('searchInput').value);
+}
+
+document.getElementById('searchInput').addEventListener('input', function() {
+  renderList(this.value);
+});
+
+// Keyboard navigation
+document.getElementById('searchInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') {
+    const first = document.querySelector('.company-item');
+    if (first) first.click();
+  }
+});
+
+renderList();
+renderTop10();
+</script>
+</body>
+</html>
